@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker, relationship
 
-engine = create_engine('sqlite:///atividades.db', convert_unicode=True)
+engine = create_engine('sqlite:///dados.db', convert_unicode=True)
 db_session = scoped_session(sessionmaker(autocommit=False, bind=engine))
 
 Base = declarative_base()
@@ -11,11 +11,11 @@ Base.query = db_session.query_property()
 class Pessoas(Base):
     __tablename__='pessoas'
     id = Column(Integer, primary_key=True)
-    nome = Column(String(40), index=True)
+    name = Column( String( 40 ), index=True )
     idade = Column(Integer)
 
     def __repr__(self):
-        return '<Pessoa {}>'.format(self.nome)
+        return '<Pessoa {}>'.format( self.nome )
 
     def save(self):
         db_session.add(self)
@@ -25,15 +25,15 @@ class Pessoas(Base):
         db_session.delete(self)
         db_session.commit()
 
-class Atividades(Base):
+class  Atividades(Base):
     __tablename__='atividades'
     id = Column(Integer, primary_key=True)
-    nome = Column(String(80))
+    nome = Column(String( 200 ))
     pessoa_id = Column(Integer, ForeignKey('pessoas.id'))
     pessoa = relationship("Pessoas")
 
     def __repr__(self):
-        return '<Pessoa {}>'.format(self.nome)
+        return '<Pessoa {}>'.format( self.nome )
 
     def save(self):
         db_session.add(self)
